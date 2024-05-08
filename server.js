@@ -6,30 +6,33 @@ const app = express();
 app.use(express.json());
 // middleware to setup a cors policy
 const corsHandler = cors({
-    origin: "*",
-    methods: "GET,PUT,POST,DELETE",
-    allowedHeaders: ["Content-type","Authorization"],
-    preflightContinue: true,
-    optionsSuccessStatus: 200
-  });
+  origin: "*",
+  methods: "GET,PUT,POST,DELETE",
+  allowedHeaders: ["Content-type", "Authorization"],
+  preflightContinue: true,
+  optionsSuccessStatus: 200,
+});
 // apply the cors to middleware
 app.use(corsHandler);
 //connect to MongoDb
-mongoose.connect("mongodb://127.0.0.1:27017/ecommerce")
-.then(() => {
+mongoose
+  .connect("mongodb://127.0.0.1:27017/ecommerce")
+  .then(() => {
     console.log("MongoDB Connected");
-})
-.catch((error) => {
+  })
+  .catch((error) => {
     console.log(error);
-});
+  });
 
 //Route
 const productRouter = require("./routes/product");
 app.use("/products", productRouter);
 const categoryRouter = require("./routes/category");
 app.use("/categories", categoryRouter);
+const ordersRoute = require("./routes/order");
+app.use("/orders", ordersRoute);
 
 //Start the server
 app.listen(5000, () => {
-    console.log("Server is runnning at http://localhost:5000");
+  console.log("Server is runnning at http://localhost:5000");
 });
